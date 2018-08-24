@@ -32,7 +32,7 @@ class QuotesSpider(scrapy.Spider):
                     l.append(s[5:s.find(',"')])
                 s = s[s.find(',"'):]
             else:
-                for i in l:
+                for i in l[:1]:
                     yield scrapy.FormRequest(
                         url = "https://api.youshuge.com/getbookinfo",
                         formdata = {"token":token,"id":i},
@@ -51,6 +51,7 @@ class QuotesSpider(scrapy.Spider):
             if d['msg'] != '余额不足':
                 item = XiaoshuoItem()
                 item['book_id'] = d['data']['book_id']
+                item['chapte_id'] = d['data']['chapte']['id']
                 item['chapte_name'] = d['data']['chapte_name']
                 item['content'] = d['data']['content']
                 yield item
